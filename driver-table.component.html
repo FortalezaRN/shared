@@ -1,0 +1,96 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#/dashboard/sindicato" class="link-primary font-weight-500"><i class="icon-home mr-1"></i>
+        Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Motoristas</li>
+    <span class="spacer"></span>
+    <li class="breadcrumb-item no-driver">
+      <a href="#/forms/motorista" class="text-muted link-primary">
+        <i class="icon-plus"></i> Novo Motorista</a>
+    </li>
+  </ol>
+
+</nav>
+
+<div class="separator-breadcrumb border-top"></div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card o-hidden pl-3 pr-3">
+      <div class="width-100 d-flex align-items-center justify-content-end" style="margin:.9rem 1.2rem 0rem 1.2rem;">
+        <label for="search" class="m-0 mr-2">Pesquisar</label>
+        <input
+          name="search"
+          type="text"
+          style="padding:5px; display: flex; width: 20%;"
+          placeholder="Filtrar pelo nome do motorista"
+          (keyup)="updateFilter($event)"
+        />
+      </div>
+      <ngx-datatable style="height: calc(100vh - 270px); box-shadow: none" class="material striped"
+        [messages]="{emptyMessage:'Nenhum motorista encontrado'}" [columnMode]="'force'" [headerHeight]="50"
+        [footerHeight]="50" [rowHeight]="45" [scrollbarV]="true" [limit]="10" [rows]="motoristas$"
+        [loadingIndicator]="loading" (activate)="onActivate($event)">
+        <ngx-datatable-column name="nome" [width]="250">
+          <ng-template ngx-datatable-header-template>
+            Motorista
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="cnh">
+          <ng-template class="vertical-center" ngx-datatable-header-template>
+            CNH
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="categoria">
+          <ng-template ngx-datatable-header-template>
+            Categoria
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="validade">
+          <ng-template ngx-datatable-header-template>
+            validade CNH
+          </ng-template>
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value | date: 'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="inclusao">
+          <ng-template ngx-datatable-header-template>
+            Data de inclusão
+          </ng-template>
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{value | date: 'dd/MM/yyyy HH:MM'}}
+          </ng-template>
+        </ngx-datatable-column>
+        <!-- <ngx-datatable-column name="idMotorista" [width]="30">
+          <ng-template ngx-datatable-header-template>
+            Ações
+          </ng-template>
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <button class="btn-edit" (click)=edit(value)><i class="icon-edit-pencil"></i></button>
+            <button class="btn-delete" (click)="onDelete(value, modalConfirm)"><i class="icon-trash"></i></button>
+          </ng-template>
+        </ngx-datatable-column> -->
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
+<ng-template #modalConfirm let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Excluir motorista</h4>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+      (click)="modal.dismiss('cancel')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p><strong>Você realmente quer excluir esse motorista?</strong></p>
+    <p>Entenda que as informações associadas a ele também ficarão indisponíveis.
+      <span class="text-danger">Essa operação não pode ser desfeita.</span>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel')">Cancelar</button>
+    <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close('excluir')">Excluir</button>
+  </div>
+</ng-template>

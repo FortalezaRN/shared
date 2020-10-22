@@ -1,0 +1,545 @@
+<div class="modal-header">
+  <h4 class="modal-title">Editar Motorista</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="card-body pt-3">
+    <div class="content">
+      <div *ngIf="loading" style="z-index: 100000; position: absolute; left: 50%; top: 50%;">
+        <span class="spinner-glow spinner-glow-primary mr-5"></span>
+      </div>
+      <form [formGroup]="motoristaForm" (ngSubmit)="onSubmit()">
+        <!-- <p class="title text-13 font-family-1 font-weight-500 line-height-1 mt-0 mb-2">INPUTS</p>
+              <div class="separator-breadcrumb border-top"></div> -->
+
+        <div class="form-group row mb-4">
+          <div class="col-sm-12 text-center">
+            <!-- <button class="btn btn-outline-primary mr-3" (click)="openCropper(modalCropper)">Launch Cropper</button> -->
+            <img class="rounded-circle" [src]="avatar?.image" [width]="cropperSettings.croppedWidth"
+              onerror="this.src='./assets/images/profile-default.png'" [height]="cropperSettings.croppedHeight"
+              (click)="openCropper(modalCropper)">
+          </div>
+        </div>
+
+        <div class="form-group row mb-4">
+          <label for="nome" class="col-sm-2 col-form-label mb-0">Nome</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Nome do motorista" formControlName="nome"
+              maxlength="250" required>
+
+            <div *ngIf="motoristaForm.controls.nome.dirty || motoristaForm.controls.nome.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.nome.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o Nome do motorista
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.nome.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.nome.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+          <label for="apelido" class="col-sm-2 col-form-label mb-0">Apelido</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="apelido do motorista" formControlName="apelido"
+              maxlength="250">
+
+            <div *ngIf="motoristaForm.controls.apelido.dirty || motoristaForm.controls.apelido.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.apelido.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.apelido.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row mb-4">
+          <label for="cpf" class="col-sm-2 col-form-label mb-0">CPF</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="CPF do motorista" formControlName="cpf"
+              maxlength="250" mask="000.000.000-00" required>
+
+            <div *ngIf="motoristaForm.controls.cpf.dirty || motoristaForm.controls.cpf.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.cpf.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o CPF do motorista
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.cpf.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.cpf.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+          <label for="rg" class="col-sm-2 col-form-label mb-0">RG/Emissor</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="RG do motorista" formControlName="rg"
+              maxlength="250" required>
+
+            <div *ngIf="motoristaForm.controls.rg.dirty || motoristaForm.controls.rg.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.rg.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o RG do motorista com o emissor
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.rg.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.rg.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row mb-4">
+          <label for="datanascimento" class="col-sm-2 col-form-label mb-0">Data de nascimento</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Data de nascimento do motorista"
+              formControlName="datanascimento" maxlength="10" mask="00/00/0000" required>
+
+            <div *ngIf="motoristaForm.controls.datanascimento.dirty || motoristaForm.controls.datanascimento.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.datanascimento.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe a data de datanascimento do motorista
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.datanascimento.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.datanascimento.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+          <label for="genero" class="col-sm-2 col-form-label mb-0">Gênero</label>
+          <div class="col-sm-4">
+            <select formControlName="genero" class="form-control custom-select">
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+              <option value="X">Não informado</option>
+            </select>
+
+            <div *ngIf="motoristaForm.controls.genero.dirty || motoristaForm.controls.genero.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.genero.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o Gênero do motorista
+              </p>
+            </div>
+            <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.genero.errors?.dispatched">
+              <i class="icon-close-solid mr-1 align-middle"></i>
+              {{motoristaForm.controls.genero.errors?.dispatched}}
+            </p>
+          </div>
+        </div>
+
+        <div class="form-group row mb-4">
+          <label for="telefone" class="col-sm-2 col-form-label mb-0">Telefone</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Telefone do motorista" formControlName="telefone"
+              maxlength="250" mask="(00)000000009" required>
+
+            <div *ngIf="motoristaForm.controls.telefone.dirty || motoristaForm.controls.telefone.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.telefone.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o telefone do motorista
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.telefone.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.telefone.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+          <label for="idnacionalidade" class="col-sm-2 col-form-label mb-0">Nacionalidade</label>
+          <div class="col-sm-4">
+            <select formControlName="idnacionalidade" class="form-control custom-select">
+              <option [ngValue]="pais.idNacionalidade.toString()" *ngFor="let pais of nacionalidades">
+                {{pais.descricao}}</option>
+            </select>
+
+            <div
+              *ngIf="motoristaForm.controls.idnacionalidade.dirty || motoristaForm.controls.idnacionalidade.touched">
+              <p class="form-alert alert-danger m-1"
+                *ngIf="motoristaForm.controls.idnacionalidade.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe a nacionalidade do motorista
+              </p>
+            </div>
+            <p class="form-alert alert-danger m-1"
+              *ngIf="motoristaForm.controls.idnacionalidade.errors?.dispatched">
+              <i class="icon-close-solid mr-1 align-middle"></i>
+              {{motoristaForm.controls.idnacionalidade.errors?.dispatched}}
+            </p>
+          </div>
+        </div>
+
+        <div class="form-group row mb-4">
+          <label for="numerocnh" class="col-sm-2 col-form-label mb-0">Número da CNH</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Número da CNH do motorista" formControlName="numerocnh"
+              maxlength="45" required>
+
+            <div *ngIf="motoristaForm.controls.numerocnh.dirty || motoristaForm.controls.numerocnh.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.numerocnh.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o número da CNH do motorista
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.numerocnh.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.numerocnh.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+          <label for="categoriacnh" class="col-sm-2 col-form-label mb-0">Categoria da CNH</label>
+          <div class="col-sm-4">
+            <select formControlName="categoriacnh" class="form-control custom-select">
+              <option value="A">A</option>
+              <option value="AB">AB</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+            </select>
+
+            <div *ngIf="motoristaForm.controls.categoriacnh.dirty || motoristaForm.controls.categoriacnh.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.categoriacnh.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o Gênero do motorista
+              </p>
+            </div>
+            <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.categoriacnh.errors?.dispatched">
+              <i class="icon-close-solid mr-1 align-middle"></i>
+              {{motoristaForm.controls.categoriacnh.errors?.dispatched}}
+            </p>
+          </div>
+        </div>
+
+        <div class="form-group row mb-4">
+          <label for="emissaocnh" class="col-sm-2 col-form-label mb-0">Emissão da CNH</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Data de emissão da CNH"
+              formControlName="emissaocnh" maxlength="10" mask="00/00/0000" required>
+
+            <div *ngIf="motoristaForm.controls.emissaocnh.dirty || motoristaForm.controls.emissaocnh.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.emissaocnh.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe a data de emissão da CNH
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.emissaocnh.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.emissaocnh.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+          <label for="validadecnh" class="col-sm-2 col-form-label mb-0">Validade da CNH</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Data de validade da CNH"
+              formControlName="validadecnh" maxlength="10" mask="00/00/0000" required>
+
+            <div *ngIf="motoristaForm.controls.validadecnh.dirty || motoristaForm.controls.validadecnh.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.validadecnh.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe a data da validade da CNH
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.validadecnh.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.validadecnh.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-group row mb-4">
+          <label for="orgaoemissorcnh" class="col-sm-2 col-form-label mb-0">Órgão Emissor da CNH</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Órgão emissor da CNH"
+              formControlName="orgaoemissorcnh" maxlength="45" required>
+
+            <div
+              *ngIf="motoristaForm.controls.orgaoemissorcnh.dirty || motoristaForm.controls.orgaoemissorcnh.touched">
+              <p class="form-alert alert-danger m-1"
+                *ngIf="motoristaForm.controls.orgaoemissorcnh.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o órgão emissor da CNH
+              </p>
+              <p class="form-alert alert-danger m-1"
+                *ngIf="motoristaForm.controls.orgaoemissorcnh.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.orgaoemissorcnh.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+          <label for="pis" class="col-sm-2 col-form-label mb-0">PIS</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Número do PIS do motorista" formControlName="pis"
+              maxlength="45" required>
+
+            <div *ngIf="motoristaForm.controls.pis.dirty || motoristaForm.controls.pis.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.pis.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o número de PIS do motorista
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.pis.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.pis.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-group row mb-4">
+          <label for="tipo" class="col-sm-2 col-form-label mb-0">Tipo de Motorista</label>
+          <div class="col-sm-4">
+            <select formControlName="tipo" class="form-control custom-select">
+              <option value="tipo1">Tipo 1</option>
+              <option value="tipo2">Tipo 2</option>
+              <option value="tipo3">Tipo 3</option>
+            </select>
+
+            <div *ngIf="motoristaForm.controls.tipo.dirty || motoristaForm.controls.tipo.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.tipo.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o tipo do motorista
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.tipo.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.tipo.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+          <label for="bloqueado" class="col-sm-2 col-form-label mb-0">Bloquear Motorista</label>
+          <div class="col-sm-4">
+            <select formControlName="bloqueado" class="form-control custom-select">
+              <option value="N">Não</option>
+              <option value="S">Sim</option>
+            </select>
+
+            <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.bloqueado.errors?.dispatched">
+              <i class="icon-close-solid mr-1 align-middle"></i>
+              {{motoristaForm.controls.bloqueado.errors?.dispatched}}
+            </p>
+          </div>
+        </div>
+
+        <p class="title text-13 font-family-1 font-weight-500 line-height-1 mt-0 mb-2">ENDEREÇO</p>
+        <div class="separator-breadcrumb border-top"></div>
+
+        <div class="form-group row mb-4">
+          <label for="cep" class="col-sm-2 col-form-label mb-0">CEP</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="CEP do motorista" formControlName="cep"
+              maxlength="9" mask="00000-000" required (blur)="carregarEndereco()">
+
+            <div *ngIf="motoristaForm.controls.cep.dirty || motoristaForm.controls.cep.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.cep.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o número do CEP do motorista
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.cep.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.cep.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+          <label for="numero" class="col-sm-2 col-form-label mb-0">Número</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Número do endereço" formControlName="numero"
+              required>
+
+            <div *ngIf="motoristaForm.controls.numero.dirty || motoristaForm.controls.numero.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.numero.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o número do endereço
+              </p>
+            </div>
+            <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.numero.errors?.dispatched">
+              <i class="icon-close-solid mr-1 align-middle"></i>
+              {{motoristaForm.controls.numero.errors?.dispatched}}
+            </p>
+          </div>
+        </div>
+
+        <div class="form-group row mb-4">
+          <label for="logradouro" class="col-sm-2 col-form-label mb-0">Logradouro</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" placeholder="Logradouro do endereço"
+              formControlName="logradouro" maxlength="250" required>
+
+            <div *ngIf="motoristaForm.controls.logradouro.dirty || motoristaForm.controls.logradouro.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.logradouro.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o logradouro do endereço
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.logradouro.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.logradouro.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row mb-4">
+          <label for="logradourocomplemento" class="col-sm-2 col-form-label mb-0">Complemento</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Complemento do endereço"
+              formControlName="logradourocomplemento" maxlength="250">
+
+            <div
+              *ngIf="motoristaForm.controls.logradourocomplemento.dirty || motoristaForm.controls.logradourocomplemento.touched">
+              <p class="form-alert alert-danger m-1"
+                *ngIf="motoristaForm.controls.logradourocomplemento.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o complemento do endereço 
+              </p>
+              <p class="form-alert alert-danger m-1"
+                *ngIf="motoristaForm.controls.logradourocomplemento.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.logradourocomplemento.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+
+          <label for="bairro" class="col-sm-2 col-form-label mb-0">Bairro</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Bairro do endereço" formControlName="bairro"
+              maxlength="250" required>
+
+            <div *ngIf="motoristaForm.controls.bairro.dirty || motoristaForm.controls.bairro.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.bairro.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o bairro do endereço
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.bairro.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.bairro.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row mb-4">
+          <label for="cidade" class="col-sm-2 col-form-label mb-0">Cidade</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Cidade do endereço" formControlName="cidade"
+              maxlength="250" required>
+
+            <div *ngIf="motoristaForm.controls.cidade.dirty || motoristaForm.controls.cidade.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.cidade.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o cidade do endereço
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.cidade.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.cidade.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+          <label for="uf" class="col-sm-2 col-form-label mb-0">Estado</label>
+          <div class="col-sm-4">
+            <select formControlName="uf" class="form-control custom-select">
+              <option value="AC">Acre</option>
+              <option value="AL">Alagoas</option>
+              <option value="AP">Amapá</option>
+              <option value="AM">Amazonas</option>
+              <option value="BA">Bahia</option>
+              <option value="CE">Ceará</option>
+              <option value="DF">Distrito Federal</option>
+              <option value="ES">Espírito Santo</option>
+              <option value="GO">Goiás</option>
+              <option value="MA">Maranhão</option>
+              <option value="MT">Mato Grosso</option>
+              <option value="MS">Mato Grosso do Sul</option>
+              <option value="MG">Minas Gerais</option>
+              <option value="PA">Pará</option>
+              <option value="PB">Paraíba</option>
+              <option value="PR">Paraná</option>
+              <option value="PE">Pernambuco</option>
+              <option value="PI">Piauí</option>
+              <option value="RJ">Rio de Janeiro</option>
+              <option value="RN">Rio Grande do Norte</option>
+              <option value="RS">Rio Grande do Sul</option>
+              <option value="RO">Rondônia</option>
+              <option value="RR">Roraima</option>
+              <option value="SC">Santa Catarina</option>
+              <option value="SP">São Paulo</option>
+              <option value="SE">Sergipe</option>
+              <option value="TO">Tocantins</option>
+            </select>
+
+            <div *ngIf="motoristaForm.controls.uf.dirty || motoristaForm.controls.uf.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.uf.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o Estado do endereço
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.uf.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.uf.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p class="title text-13 font-family-1 font-weight-500 line-height-1 mt-0 mb-2">DADOS DO ACESSO</p>
+        <div class="separator-breadcrumb border-top"></div>
+
+        <div class="form-group row mb-4">
+          <label for="email" class="col-sm-2 col-form-label mb-0">Email</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" placeholder="Email do motorista" formControlName="email"
+              maxlength="250" required>
+
+            <div *ngIf="motoristaForm.controls.email.dirty || motoristaForm.controls.email.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.email.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o email do motorista
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.email.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.email.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row mb-4">
+          <label for="senha" class="col-sm-2 col-form-label mb-0">Senha</label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control" placeholder="Senha do motorista" formControlName="senha"
+              maxlength="250">
+
+            <div *ngIf="motoristaForm.controls.senha.dirty || motoristaForm.controls.senha.touched">
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.senha.errors?.required">
+                <i class="icon-close-solid mr-1 align-middle"></i> Informe o senha do motorista
+              </p>
+              <p class="form-alert alert-danger m-1" *ngIf="motoristaForm.controls.senha.errors?.dispatched">
+                <i class="icon-close-solid mr-1 align-middle"></i>
+                {{motoristaForm.controls.senha.errors?.dispatched}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="form-group row mb-4">
+    <div class="col-sm-12">
+      <button type="button" class="btn btn-primary m-1" type="submit">Salvar</button>
+      <button type="button" class="btn btn-default m-1" (click)="activeModal.close('Close click')">Cancelar</button>
+      <button type="button" class="btn btn-danger m-1" *ngIf="motoristaForm.controls.idmotorista.value"
+        (click)="onDelete(modalConfirm)">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalConfirm let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Excluir motorista</h4>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+      (click)="modal.dismiss('cancel')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p><strong>Você realmente quer excluir esse motorista?</strong></p>
+    <p>Entenda que as informações associadas a ele também ficarão indisponíveis.
+      <span class="text-danger">Essa operação não pode ser desfeita.</span>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel')">Cancelar</button>
+    <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close('excluir')">Excluir</button>
+  </div>
+</ng-template>
+
+<ng-template #modalCropper let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Imagem do motorista</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <img-cropper [image]="avatar" [settings]="cropperSettings"></img-cropper><br>
+    <img *ngIf="avatar?.image" class="mt-3  mr-3" [src]="avatar?.image" [width]="cropperSettings.croppedWidth"
+      [height]="cropperSettings.croppedHeight">
+    <img *ngIf="avatar?.image" class="rounded-circle  mt-3" [src]="avatar?.image" [width]="cropperSettings.croppedWidth"
+      [height]="cropperSettings.croppedHeight">
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Salvar</button>
+  </div>
+</ng-template>
